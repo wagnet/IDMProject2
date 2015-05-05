@@ -34,3 +34,53 @@ Train_total = Train_total - ones(m,1)*train_mean;
 trimmed_scores = scores(:,1:300);
 classp_scores = trimmed_scores(1:mp,:);
 classm_scores = trimmed_scores(mp+1:m,:);
+
+%% Fisher
+
+
+meanp=mean(classp_scores);
+meanm=mean(classm_scores);
+
+psize=size(classp_scores,1)
+nsize=size(classm_scores,1)
+Bp=classp_scores-ones(psize,1)*meanp;
+Bn=classm_scores-ones(nsize,1)*meanm;
+
+Sw=Bp'*Bp+Bn'*Bn;
+wfisher = Sw\(meanp-meanm)';
+wfisher=wfisher/norm(wfisher);
+
+tfisher=(meanp+meanm)./2*wfisher
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Analyze training data  results of the Fisher Linear Discriminant
+
+FisherPosErrorTrain = sum(classp_scores*wfisher <= tfisher);
+FisherNegErrorTrain = sum(classm_scores*wfisher >= tfisher);
+
+FisherTrainError= ((FisherPosErrorTrain + FisherNegErrorTrain)/(size(trimmed_scores,1)))  
+
+% Histogram of Fisher Training Results
+HistClass(classp_scores,classm_scores,wfisher,tfisher,...
+    'Fisher Method Training Results',FisherTrainError); 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%{
+FisherPosErrorTest = sum(Classp_test*wfisher <= tfisher);
+FisherNegErrorTest = sum(Classm_test*wfisher >= tfisher);
+
+FisherTestError= ((FisherPosErrorTest + FisherNegErrorTest)/(size(Test,1)))   
+
+% Histogram of Fisher Testing Results
+HistClass(Classp_test,Classm_test,wfisher,tfisher,...
+    'Fisher Method Testing Results',FisherTestError); 
+
+%}
+
+
+
+
+
+
+
+
