@@ -17,6 +17,16 @@ Classm_test=full(Classm_test);
 %% PCA on data
 
 Train_total = [Classp_train; Classm_train];
+
+
+
+[m,n] = size(Train_total);
+train_mean = (1/m)*(ones(1,m)*Train_total);
+
+Train_total = Train_total - ones(m,1)*train_mean;
+
+
+%%
+
 [eigenvectors, scores, eigenvalues] = pca(Train_total);
-z = eigenvectors(1:300,:);
-y = eigenvectors(:,1:300);
+
