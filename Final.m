@@ -18,3 +18,5 @@ Classm_test=full(Classm_test);
 
 Train_total = [Classp_train; Classm_train];
 [eigenvectors, scores, eigenvalues] = pca(Train_total);
+z = eigenvectors(1:300,:);
+y = eigenvectors(:,1:300);
