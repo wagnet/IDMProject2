@@ -14,6 +14,20 @@ Classm_train=full(Classm_train);
 Classp_test=full(Classp_test);
 Classm_test=full(Classm_test);
 
+
+% Set random number to an initial seed
+[r,c]=size(Classm_train);
+s=RandStream('mt19937ar','Seed',550);
+%generate a permutation of the data
+p=randperm(s,r);
+Classm_train=Classm_train(p,:);
+%featurenames=featurenames(p);
+
+
+
+
+Classm_train = Classm_train(1:380,:);
+
 %% PCA on data
 Train_total = [Classp_train; Classm_train];
 
@@ -90,7 +104,54 @@ word_values = zeros(30,1);
 
 for i = 1:30
     [M,I] = max(absA);
-    words(i,1) = featurenames(I,1);
+    words(i,1) = featurenames(I);
     word_values(i,1) = A(I,1);
     absA(I,1) = 0;
 end
+
+%% Compute test scores
+
+Classm_test_scores = Classm_test * eigenvectors;
+Classp_test_scores = Classp_test * eigenvectors;
+
+
+%{
+FisherPosErrorTest = sum(Classp_test*wfisher <= tfisher);
+FisherNegErrorTest = sum(Classm_test*wfisher >= tfisher);
+
+FisherTestError= ((FisherPosErrorTest + FisherNegErrorTest)/(size(Test,1)))   
+
+% Histogram of Fisher Testing Results
+HistClass(Classp_test,Classm_test,wfisher,tfisher,...
+    'Fisher Method Testing Results',FisherTestError); 
+
+%}
+
+%% Fisher on Test
+
+meanp_test=mean(Classp_test_scores);
+meanm_test=mean(Classm_test_scores);
+
+psize_test=size(Classp_test_scores,1);
+nsize_test=size(Classm_test_scores,1);
+Bp_test=Classp_test_scores-ones(psize_test,1)*meanp_test;
+Bn_test=Classm_test_scores-ones(nsize_test,1)*meanm_test;
+
+Sw_test=Bp_test'*Bp_test+Bn_test'*Bn_test;
+wfisher_test = Sw_test\(meanp_test-meanm_test)';
+wfisher_test=wfisher_test/norm(wfisher_test);
+
+tfisher_test=(meanp_test+meanm_test)./2*wfisher_test
+
+% Analyze training data  results of the Fisher Linear Discriminant
+
+FisherPosErrorTrain = sum(Classp_test_scores*wfisher_test <= tfisher_test);
+FisherNegErrorTrain = sum(Classm_test_scores*wfisher_test >= tfisher_test);
+
+FisherTrainError= ((FisherPosErrorTrain + FisherNegErrorTrain)/(size(trimmed_scores,1)))  
+
+% Histogram of Fisher Training Results
+HistClass(Classp_test_scores,Classm_test_scores,wfisher_test,tfisher_test,...
+    'Fisher Method Testing Results',FisherTrainError); 
+
+%RESULTS using 380 sentences from each class 5.39% training, 39.87% testing

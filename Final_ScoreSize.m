@@ -31,12 +31,7 @@ Train_total = Train_total - ones(m,1)*train_mean;
 [eigenvectors, scores, eigenvalues] = pca(Train_total);
 
 %% 
-explainedVar = cumsum(eigenvalues./sum(eigenvalues) * 100)
-figure
-bar(explainedVar)
-
-%% 
-trimmed_scores = scores(:,1:300);
+trimmed_scores = scores(:,1:450);
 classp_scores = trimmed_scores(1:mp,:);
 classm_scores = trimmed_scores(mp+1:m,:);
 
@@ -146,4 +141,15 @@ FisherTrainError= ((FisherPosErrorTrain + FisherNegErrorTrain)/(size(trimmed_sco
 HistClass(Classp_test_scores,Classm_test_scores,wfisher_test,tfisher_test,...
     'Fisher Method Testing Results',FisherTrainError);
 
-%RESULTS 11.8% training, 4.92% testing
+%RESULTS size = 50     21.45% training, 4.92% testing
+%RESULTS size = 100    17.69% training, 4.92% testing
+%RESULTS size = 200    13.99% training, 4.92% testing
+%RESULTS size = 250    12.76% training, 4.92% testing
+%RESULTS size = 400    9.34% training, 4.92% testing
+%RESULTS size = 450    8.34% training, 4.92% testing
+%93.52036866 variance explained and elbow is visible
+
+%RESULTS  size = 500    7.34% training, 4.92% testing
+
+%Warning: Matrix is close to singular or badly scaled. Results may be inaccurate. RCOND =  4.133808e-45. 
+%this error occurs using as low as size 50
