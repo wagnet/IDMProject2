@@ -10,7 +10,7 @@ load DDISample.mat
 
 % convert to normal format instead of sparse
 Classp_train=full(Classp_train);
-Classm_train=full(Classm_train);
+Classm_train=full(Classm_train);    
 Classp_test=full(Classp_test);
 Classm_test=full(Classm_test);
 
@@ -80,7 +80,17 @@ HistClass(Classp_test,Classm_test,wfisher,tfisher,...
 
 
 
+%%
 
+A = Train_total' * trimmed_scores * wfisher;
+absA = abs(A);
 
+words = cell(30,1);
+word_values = zeros(30,1);
 
-
+for i = 1:30
+    [M,I] = max(absA);
+    words(i,1) = featurenames(I,1);
+    word_values(i,1) = A(I,1);
+    absA(I,1) = 0;
+end

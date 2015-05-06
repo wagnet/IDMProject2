@@ -10,7 +10,7 @@ load DDISample.mat
 
 % convert to normal format instead of sparse
 Classp_train=full(Classp_train);
-Classm_train=full(Classm_train);
+Classm_train=full(Classm_train);    
 Classp_test=full(Classp_test);
 Classm_test=full(Classm_test);
 
@@ -38,13 +38,13 @@ classm_scores = trimmed_scores(mp+1:m,:);
 %% Fisher
 
 
-meanp=mean(Classp_train);
-meanm=mean(Classm_train);
+meanp=mean(classp_scores);
+meanm=mean(classm_scores);
 
-psize=size(Classp_train,1)
-nsize=size(Classm_train,1)
-Bp=Classp_train-ones(psize,1)*meanp;
-Bn=Classm_train-ones(nsize,1)*meanm;
+psize=size(classp_scores,1)
+nsize=size(classm_scores,1)
+Bp=classp_scores-ones(psize,1)*meanp;
+Bn=classm_scores-ones(nsize,1)*meanm;
 
 Sw=Bp'*Bp+Bn'*Bn;
 wfisher = Sw\(meanp-meanm)';
@@ -55,13 +55,13 @@ tfisher=(meanp+meanm)./2*wfisher
 
 % Analyze training data  results of the Fisher Linear Discriminant
 
-FisherPosErrorTrain = sum(Classp_train*wfisher <= tfisher);
-FisherNegErrorTrain = sum(Classm_train*wfisher >= tfisher);
+FisherPosErrorTrain = sum(classp_scores*wfisher <= tfisher);
+FisherNegErrorTrain = sum(classm_scores*wfisher >= tfisher);
 
-FisherTrainError= ((FisherPosErrorTrain + FisherNegErrorTrain)/(size(Train_total,1)))  
+FisherTrainError= ((FisherPosErrorTrain + FisherNegErrorTrain)/(size(trimmed_scores,1)))  
 
 % Histogram of Fisher Training Results
-HistClass(Classp_train,Classm_train,wfisher,tfisher,...
+HistClass(classp_scores,classm_scores,wfisher,tfisher,...
     'Fisher Method Training Results',FisherTrainError); 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -80,7 +80,17 @@ HistClass(Classp_test,Classm_test,wfisher,tfisher,...
 
 
 
+%%
 
+A = Train_total' * trimmed_scores * wfisher;
+absA = abs(A);
 
+words = cell(30,1);
+word_values = zeros(30,1);
 
-
+for i = 1:30
+    [M,I] = max(absA);
+    words(i,1) = featurenames(I,1);
+    word_values(i,1) = A(I,1);
+    absA(I,1) = 0;
+end
