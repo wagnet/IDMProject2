@@ -31,7 +31,7 @@ Train_total = Train_total - ones(m,1)*train_mean;
 [eigenvectors, scores, eigenvalues] = pca(Train_total);
 
 %% 
-trim = 438
+trim = 435
 trimmed_scores = scores(:,1:trim);
 classp_scores = trimmed_scores(1:mp,:);
 classm_scores = trimmed_scores(mp+1:m,:);
@@ -114,8 +114,6 @@ FisherTestError= ((FisherPosErrorTest + FisherNegErrorTest)/(size(trimmed_scores
 % Histogram of Fisher Testing Results
 HistClass(classp_test_scores,classm_test_scores,wfisher,tfisher,...
     'Fisher Method Testing Results',FisherTestError); 
-
-% 8.61% training, 13.53% testing
 
 %%
 
