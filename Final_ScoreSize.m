@@ -92,14 +92,18 @@ Test_total = [Classp_test; Classm_test];
 [mm_test,nm_test] = size(Classm_test);    % size for Classm
 [m_test,n_test] = size(Test_total);      % size for total
 
+Test_total2 = Test_total - ones(m_test,1)*train_mean;
+Classp_test2 = Test_total2(1:mp_test,:);
+Classm_test2 = Test_total2((mp_test+1):end,:);
 
-Classm_test_scores = Classm_test * eigenvectors;
-Classp_test_scores = Classp_test * eigenvectors;
+%%
+Classm_test_scores = Classm_test2 * eigenvectors;
+Classp_test_scores = Classp_test2 * eigenvectors;
 
 scores_test_total = [Classp_test_scores; Classm_test_scores];
 
 
-trimmed_scores_test = scores_test_total(:,1:trim);
+trimmed_scores_test = scores_test_total(:,1:300);
 classp_test_scores = trimmed_scores_test(1:mp_test,:);
 classm_test_scores = trimmed_scores_test(mp_test+1:m_test,:);
 

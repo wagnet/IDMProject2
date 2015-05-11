@@ -23,7 +23,7 @@ Train_total = [Classp_train; Classm_train];
 
 train_mean = (1/m)*(ones(1,m)*Train_total);
 
-Train_total2 = Train_total - ones(m,1)*train_mean;
+Train_total = Train_total - ones(m,1)*train_mean;
 
 
 %%
@@ -123,7 +123,6 @@ scores_test_total = [Classp_test_scores; Classm_test_scores];
 trimmed_scores_test = scores_test_total(:,1:300);
 classp_test_scores = trimmed_scores_test(1:mp_test,:);
 classm_test_scores = trimmed_scores_test(mp_test+1:m_test,:);
-
 %% Fisher on Test
 
 FisherPosErrorTest = sum(classp_test_scores*wfisher <= tfisher);
