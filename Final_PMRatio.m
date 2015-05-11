@@ -37,7 +37,7 @@ Train_total = [Classp_train; Classm_train];
 
 train_mean = (1/m)*(ones(1,m)*Train_total);
 
-Train_total = Train_total - ones(m,1)*train_mean;
+Train_total2 = Train_total - ones(m,1)*train_mean;
 
 
 %%
@@ -110,16 +110,19 @@ for i = 1:30
 end
 
 %% Compute Test Scores
-
 Test_total = [Classp_test; Classm_test];
 
 [mp_test,np_test] = size(Classp_test);    % size for Classp
 [mm_test,nm_test] = size(Classm_test);    % size for Classm
 [m_test,n_test] = size(Test_total);      % size for total
 
+Test_total2 = Test_total - ones(m_test,1)*train_mean;
+Classp_test2 = Test_total2(1:mp_test,:);
+Classm_test2 = Test_total2((mp_test+1):end,:);
 
-Classm_test_scores = Classm_test * eigenvectors;
-Classp_test_scores = Classp_test * eigenvectors;
+%%
+Classm_test_scores = Classm_test2 * eigenvectors;
+Classp_test_scores = Classp_test2 * eigenvectors;
 
 scores_test_total = [Classp_test_scores; Classm_test_scores];
 
