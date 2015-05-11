@@ -24,6 +24,12 @@ Test = [Classp_test;Classm_test];
 [ptest_m,ptest_n]=size(Classp_test);
 [mtest_m,mtest_n]=size(Classm_test);
 
+train_mean = (1/ptrain_m+mtrain_m)*(ones(1,ptrain_m+mtrain_m)*Train);
+
+Train = Train - ones(ptrain_m+mtrain_m,1)*train_mean;
+Test = Test - ones(ptest_m+mtest_m,1)*train_mean;
+
+
 YTrain = [ones(ptrain_m,1);-ones(mtrain_m,1)];
 YTest = [ones(ptest_m,1);-ones(mtest_m,1)];
 
@@ -41,9 +47,19 @@ total_error=0;
 [s,z]=size(Test)
 
 %%
-for i=1:s,
+perror=0;
+for i=1:ptest_m,
     if(YTest(i)~=YTrain(classifier(i)))
-        total_error=total_error+1;
+        perror=perror+1;
     end
 end
+
+merror=0;
+for i=ptest_m+1:s,
+    if(YTest(i)~=YTrain(classifier(i)))
+        merror=merror+1;
+    end
+end
+
+total_error = merror+perror;
 error_percent = total_error/s

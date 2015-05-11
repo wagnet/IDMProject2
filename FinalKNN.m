@@ -31,8 +31,8 @@ YTest = [ones(ptest_m,1);-ones(mtest_m,1)];
 
 train_mean = (1/ptrain_m+mtrain_m)*(ones(1,ptrain_m+mtrain_m)*Train);
 
-%Train = Train - ones(ptrain_m+mtrain_m,1)*train_mean;
-%Test = Test - ones(ptest_m+mtest_m,1)*train_mean;
+Train = Train - ones(ptrain_m+mtrain_m,1)*train_mean;
+Test = Test - ones(ptest_m+mtest_m,1)*train_mean;
 
 
 %Train_total = Train_total - ones(m,1)*train_mean;
