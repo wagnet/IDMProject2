@@ -68,19 +68,7 @@ FisherTrainError= ((FisherPosErrorTrain + FisherNegErrorTrain)/(size(trimmed_sco
 % Histogram of Fisher Training Results
 HistClass(classp_scores,classm_scores,wfisher,tfisher,...
     'Fisher Method Training Results',FisherTrainError); 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%{
-FisherPosErrorTest = sum(Classp_test*wfisher <= tfisher);
-FisherNegErrorTest = sum(Classm_test*wfisher >= tfisher);
-
-FisherTestError= ((FisherPosErrorTest + FisherNegErrorTest)/(size(Test,1)))   
-
-% Histogram of Fisher Testing Results
-HistClass(Classp_test,Classm_test,wfisher,tfisher,...
-    'Fisher Method Testing Results',FisherTestError); 
-
-%}
 
 
 
@@ -138,4 +126,4 @@ HistClass(classp_test_scores,classm_test_scores,wfisher,tfisher,...
 
 
 
-%RESULTS 11.8% training, 14.09% testing
+%RESULTS 11.8% training, 18.24% testing

@@ -23,7 +23,7 @@ Train_total = [Classp_train; Classm_train];
 
 train_mean = (1/m)*(ones(1,m)*Train_total);
 
-Train_total = Train_total - ones(m,1)*train_mean;
+Train_total2 = Train_total - ones(m,1)*train_mean;
 
 
 %%
@@ -31,7 +31,7 @@ Train_total = Train_total - ones(m,1)*train_mean;
 [eigenvectors, scores, eigenvalues] = pca(Train_total);
 
 %% 
-trim = 438
+trim = 337
 trimmed_scores = scores(:,1:trim);
 classp_scores = trimmed_scores(1:mp,:);
 classm_scores = trimmed_scores(mp+1:m,:);
@@ -103,7 +103,7 @@ Classp_test_scores = Classp_test2 * eigenvectors;
 scores_test_total = [Classp_test_scores; Classm_test_scores];
 
 
-trimmed_scores_test = scores_test_total(:,1:300);
+trimmed_scores_test = scores_test_total(:,1:trim);
 classp_test_scores = trimmed_scores_test(1:mp_test,:);
 classm_test_scores = trimmed_scores_test(mp_test+1:m_test,:);
 
@@ -119,27 +119,27 @@ FisherTestError= ((FisherPosErrorTest + FisherNegErrorTest)/(size(trimmed_scores
 HistClass(classp_test_scores,classm_test_scores,wfisher,tfisher,...
     'Fisher Method Testing Results',FisherTestError); 
 
-% 8.61% training, 13.53% testing
+
 
 %%
 
 
-%RESULTS size = 50     21.45% training, 14.64% testing
-%RESULTS size = 100    17.69% training, 14.52% testing
-%RESULTS size = 150    15.30% training, 14.09% testing
-%RESULTS size = 200    13.99% training, 14.49% testing
-%RESULTS size = 250    12.76% training, 14.33% testing
-%RESULTS size = 300    11.8% training, 14.09% testing
-%RESULTS size = 350    10.23% training, 14.38% testing
-%RESULTS size = 400    9.34% training, 13.95% testing
-%RESULTS size = 410    8.61% training, 14.17% testing
-%RESULTS size = 420    8.84% training, 14.52% testing
-%RESULTS size = 430    8.73% training, 14.35% testing
-%RESULTS size = 440    8.73% training, 13.58% testing
-%RESULTS size = 450    8.34% training, 14.03% testing
-%93.52036866 variance explained and elbow is visible
+%RESULTS size = 50     21.45% training, 21.91% testing
+%RESULTS size = 100    17.69% training, 20.28% testing
+%RESULTS size = 150    15.30% training, 18.42% testing
+%RESULTS size = 200    13.99% training, 18.40% testing
+%RESULTS size = 250    12.76% training, 18.48% testing
+%RESULTS size = 300    11.8% training, 18.24% testing
+%RESULTS size = 320    11.1% training, 18.15% testing
+%RESULTS size = 330    11.8% training, 17.94% testing
+%RESULTS size = 337    10.38% training, 17.86% testing
+%RESULTS size = 340    10.34% training, 18.29% testing
+%90.33 variance explained and elbow is visible
+%RESULTS size = 400    9.34% training, 18.69% testing
 
-%RESULTS  size = 500    7.34% training, 14.22% testing
+
+
+
 
 %Warning: Matrix is close to singular or badly scaled. Results may be inaccurate. RCOND =  4.133808e-45. 
 %this error occurs using as low as size 50
