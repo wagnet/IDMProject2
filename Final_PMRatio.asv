@@ -21,7 +21,7 @@ s=RandStream('mt19937ar','Seed',550);
 %generate a permutation of the data
 p=randperm(s,r);
 Classm_train=Classm_train(p,:);
-
+%featurenames=featurenames(p);
 
 
 
@@ -133,4 +133,4 @@ HistClass(classp_test_scores,classm_test_scores,wfisher,tfisher,...
     'Fisher Method Testing Results',FisherTestError); 
 
 
-%RESULTS using 380 sentences from each class 5.39% training, 23.87% testing
+%RESULTS using 380 sentences from each class 5.39% training, 19.24% testing
