@@ -1,5 +1,5 @@
 %% Text Mining Final-Project by Thomas Wagner, Alexander Allen, MingYi Wang
-%May 14 2015
+% May 14 2015
 
 
 %% Input Data 
