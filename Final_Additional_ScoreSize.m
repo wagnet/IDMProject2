@@ -1,5 +1,5 @@
-%% Script to help get started on DDI Final Project
-
+%% Text Mining Final-Project by Thomas Wagner, Alexander Allen, MingYi Wang
+% May 14 2015
 
 %% Input Data 
 clear all
@@ -68,7 +68,7 @@ HistClass(classp_scores,classm_scores,wfisher,tfisher,...
 
 
 
-%%
+%% Top 30 words
 
 A = Train_total' * trimmed_scores * wfisher;
 absA = abs(A);
@@ -121,7 +121,7 @@ HistClass(classp_test_scores,classm_test_scores,wfisher,tfisher,...
 
 
 
-%%
+%% Experimentation results
 
 
 %RESULTS size = 50     21.45% training, 21.91% testing

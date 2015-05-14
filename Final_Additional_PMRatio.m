@@ -1,4 +1,5 @@
-%% Script to help get started on DDI Final Project
+%% Text Mining Final-Project by Thomas Wagner, Alexander Allen, MingYi Wang
+% May 14 2015
 
 
 %% Input Data 
@@ -13,6 +14,20 @@ Classp_train=full(Classp_train);
 Classm_train=full(Classm_train);    
 Classp_test=full(Classp_test);
 Classm_test=full(Classm_test);
+
+
+% Set random number to an initial seed
+[r,c]=size(Classm_train);
+s=RandStream('mt19937ar','Seed',550);
+%generate a permutation of the data
+p=randperm(s,r);
+Classm_train=Classm_train(p,:);
+
+
+
+
+
+Classm_train = Classm_train(1:380,:);
 
 %% PCA on data
 Train_total = [Classp_train; Classm_train];
@@ -29,11 +44,6 @@ Train_total2 = Train_total - ones(m,1)*train_mean;
 %%
 
 [eigenvectors, scores, eigenvalues] = pca(Train_total);
-
-%% 
-explainedVar = cumsum(eigenvalues./sum(eigenvalues) * 100)
-figure
-bar(explainedVar)
 
 %% 
 trimmed_scores = scores(:,1:300);
@@ -68,12 +78,14 @@ FisherTrainError= ((FisherPosErrorTrain + FisherNegErrorTrain)/(size(trimmed_sco
 % Histogram of Fisher Training Results
 HistClass(classp_scores,classm_scores,wfisher,tfisher,...
     'Fisher Method Training Results',FisherTrainError); 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
 
 
-%%
+
+%% Top 30 words
 
 A = Train_total' * trimmed_scores * wfisher;
 absA = abs(A);
@@ -83,14 +95,12 @@ word_values = zeros(30,1);
 
 for i = 1:30
     [M,I] = max(absA);
-    words(i,1) = featurenames(I,1);
+    words(i,1) = featurenames(I);
     word_values(i,1) = A(I,1);
     absA(I,1) = 0;
 end
 
-
-%% Compute test scores
-
+%% Compute Test Scores
 Test_total = [Classp_test; Classm_test];
 
 [mp_test,np_test] = size(Classp_test);    % size for Classp
@@ -124,6 +134,4 @@ HistClass(classp_test_scores,classm_test_scores,wfisher,tfisher,...
     'Fisher Method Testing Results',FisherTestError); 
 
 
-
-
-%RESULTS 11.8% training, 18.24% testing
+%RESULTS using 380 sentences from each class 5.39% training, 23.87% testing

@@ -1,4 +1,5 @@
-%% Script to help get started on DDI Final Project
+%% Text Mining Final-Project by Thomas Wagner, Alexander Allen, MingYi Wang
+% May 14 2015
 
 
 %% Input Data 
@@ -31,8 +32,12 @@ Train_total2 = Train_total - ones(m,1)*train_mean;
 [eigenvectors, scores, eigenvalues] = pca(Train_total);
 
 %% 
-trim = 340
-trimmed_scores = scores(:,1:trim);
+explainedVar = cumsum(eigenvalues./sum(eigenvalues) * 100)
+figure
+bar(explainedVar)
+
+%% 
+trimmed_scores = scores(:,1:300);
 classp_scores = trimmed_scores(1:mp,:);
 classm_scores = trimmed_scores(mp+1:m,:);
 
@@ -64,11 +69,12 @@ FisherTrainError= ((FisherPosErrorTrain + FisherNegErrorTrain)/(size(trimmed_sco
 % Histogram of Fisher Training Results
 HistClass(classp_scores,classm_scores,wfisher,tfisher,...
     'Fisher Method Training Results',FisherTrainError); 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
-%%
+
+
+%% Top 30 words
 
 A = Train_total' * trimmed_scores * wfisher;
 absA = abs(A);
@@ -84,7 +90,7 @@ for i = 1:30
 end
 
 
-%% Compute Test Scores
+%% Compute test scores
 
 Test_total = [Classp_test; Classm_test];
 
@@ -103,10 +109,9 @@ Classp_test_scores = Classp_test2 * eigenvectors;
 scores_test_total = [Classp_test_scores; Classm_test_scores];
 
 
-trimmed_scores_test = scores_test_total(:,1:trim);
+trimmed_scores_test = scores_test_total(:,1:300);
 classp_test_scores = trimmed_scores_test(1:mp_test,:);
 classm_test_scores = trimmed_scores_test(mp_test+1:m_test,:);
-
 
 %% Fisher on Test
 
@@ -121,23 +126,5 @@ HistClass(classp_test_scores,classm_test_scores,wfisher,tfisher,...
 
 
 
-%%
 
-
-%RESULTS size = 50     21.45% training, 21.91% testing
-%RESULTS size = 100    17.69% training, 20.28% testing
-%RESULTS size = 150    15.30% training, 18.42% testing
-%RESULTS size = 200    13.99% training, 18.40% testing
-%RESULTS size = 250    12.76% training, 18.48% testing
-%RESULTS size = 300    11.8% training, 18.24% testing
-%RESULTS size = 320    11.1% training, 18.15% testing
-%RESULTS size = 330    11.8% training, 17.94% testing
-%RESULTS size = 350    10.23% training, 18.58% testing
-%RESULTS size = 400    9.34% training, 18.69% testing
-%RESULTS size = 450    8.34% training, 19.06% testing
-%93.52036866 variance explained and elbow is visible
-
-%RESULTS  size = 500    7.34% training, 18.68% testing
-
-%Warning: Matrix is close to singular or badly scaled. Results may be inaccurate. RCOND =  4.133808e-45. 
-%this error occurs using as low as size 50
+%RESULTS 11.8% training, 18.24% testing
